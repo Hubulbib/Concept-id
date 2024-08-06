@@ -8,5 +8,6 @@ export interface AuthRepository {
   signIn: (signInDto: SignInDto, detail: DetailDto) => Promise<AuthBackDto>
   signUp: (signUpDto: SignUpDto, detail: DetailDto) => Promise<AuthBackDto>
   logout: (refreshToken: string) => Promise<void>
+  activate: (activationLink: string) => Promise<void>
   refresh: (refreshDto: RefreshDto, detail: DetailDto) => Promise<AuthBackDto>
 }

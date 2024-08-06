@@ -2,6 +2,7 @@ import { compare, hash } from 'bcrypt'
 import { genUuid } from '../../../utils/generate.js'
 import { UserMapper } from '../../mappers/user.mapper.js'
 import { ApiError } from '../../../exceptions/api.exception.js'
+import { MailRepository } from '../MailRepository/mail.repository'
 import { type User, userModel } from '../../entities/user.entity.js'
 import { SessionRepositoryImpl } from '../TokenReposiory/session.repository.impl.js'
 import { type DetailDto } from '../../../../core/repositories/AuthRepository/dtos/detail.dto.js'
@@ -10,6 +11,7 @@ import { type SignUpDto } from '../../../../core/repositories/AuthRepository/dto
 import { type RefreshDto } from '../../../../core/repositories/AuthRepository/dtos/refresh.dto.js'
 import { type AuthBackDto } from '../../../../core/repositories/AuthRepository/dtos/auth-back.dto.js'
 import { type AuthRepository } from '../../../../core/repositories/AuthRepository/auth.repository.js'
+import { EUserRole } from '../../entities/enums/user-role.enum'
 import 'dotenv/config.js'
 
 export class AuthRepositoryImpl implements AuthRepository {
@@ -26,13 +28,20 @@ export class AuthRepositoryImpl implements AuthRepository {
       ...detail,
       uuid: genUuid(),
     }
+    const activationLink = genUuid()
     const hashedPassword = await hash(signUpDto.password, 4)
     const user = await this.userRepository.create({
       ...signUpDto,
       uuid: genUuid(),
       password: hashedPassword,
       devices: [device],
+      activationLink,
     })
+
+    await new MailRepository().sendActivationMail(
+      signUpDto.email,
+      `${process.env.API_URL}/api/auth/activate/${activationLink}`,
+    )
 
     return await this.responseData(user, device.uuid)
   }
@@ -119,6 +128,18 @@ export class AuthRepositoryImpl implements AuthRepository {
     await this.sessionRepository.removeSessionByRefresh(refreshDto.refreshToken)
 
     return await this.responseData(user, device.uuid)
+  }
+
+  public activate = async (activationLink: string): Promise<void> => {
+    const user = await this.userRepository.findOne({ activationLink })
+    if (user.role != EUserRole.unverified) {
+      throw ApiError.BadRequest('Пользователь уже активирован')
+    }
+    if (!user) {
+      throw ApiError.BadRequest('Неверная ссылка активации')
+    }
+    user.role = EUserRole.user
+    await user.save()
   }
 
   private readonly responseData = async (userData: User, uuidDevice: string): Promise<AuthBackDto> => {

@@ -5,10 +5,10 @@ import { ResponseTokenDto } from './dtos/response-token.dto.js'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
 import { AuthService } from '../../../core/services/AuthService/auth.service.js'
 import { AuthRepositoryImpl } from '../../db/repositories/AuthRepository/auth.repository.impl.js'
-import 'dotenv/config'
 import { type SignInDto } from '../../../core/repositories/AuthRepository/dtos/sign-in.dto'
 import { type SignUpDto } from '../../../core/repositories/AuthRepository/dtos/sign-up.dto'
 import { type RefreshDto } from '../../../core/repositories/AuthRepository/dtos/refresh.dto'
+import 'dotenv/config.js'
 
 class AuthController {
   constructor(readonly authService: AuthService) {}
@@ -76,6 +76,16 @@ class AuthController {
       const { refreshToken }: RefreshDto = req.cookies
       await this.authService.logout(refreshToken)
       res.clearCookie('refreshToken')
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  activate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { link } = req.params
+      await this.authService.activate(link)
+      res.redirect(process.env.CLIENT_URL)
     } catch (err) {
       next(err)
     }

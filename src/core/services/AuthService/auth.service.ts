@@ -23,4 +23,8 @@ export class AuthService {
   public logout = async (refreshToken: string): Promise<void> => {
     await this.authRepository.logout(refreshToken)
   }
+
+  public activate = async (activationLink: string): Promise<void> => {
+    await this.authRepository.activate(activationLink)
+  }
 }

@@ -51,13 +51,16 @@ export class User {
   @prop({ type: String, required: false, unique: true })
   phone: string
 
+  @prop({ type: String, required: true, unique: true })
+  activationLink: string
+
   @prop({ type: Date, required: false })
   dateBirthday?: Date
 
   @prop({ enum: EUserGender, required: false })
   gender: EUserGender
 
-  @prop({ enum: EUserRole, type: String, default: () => EUserRole.user })
+  @prop({ enum: EUserRole, type: String, default: () => EUserRole.unverified })
   role: EUserRole
 
   @prop({ type: String, required: false })
