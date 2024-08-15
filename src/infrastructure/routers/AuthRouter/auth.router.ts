@@ -16,6 +16,6 @@ router.post('/refresh', RefreshValidator, authController.refresh)
 
 router.post('/logout', [AuthMiddleware, ...LogoutValidator], authController.logout)
 
-router.post('/activate/:link', authController.activate)
+router.get('/activate/:link', authController.activate)
 
 export default router
