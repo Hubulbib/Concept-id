@@ -1,11 +1,13 @@
 FROM node:18.18.2
 
-WORKDIR /usr/src/app/server
+ARG APP_DIR=app
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
 
-COPY ./package.json .
+COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
-CMD ["npm", "prod:start"]
+CMD npm prod:start

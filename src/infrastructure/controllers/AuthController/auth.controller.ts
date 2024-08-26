@@ -75,7 +75,7 @@ class AuthController {
       }
       const { refreshToken }: RefreshDto = req.cookies
       await this.authService.logout(refreshToken)
-      res.clearCookie('refreshToken').end()
+      res.clearCookie('refreshToken')
     } catch (err) {
       next(err)
     }
@@ -92,9 +92,7 @@ class AuthController {
   }
 
   private readonly resCookieRefreshToken = (res: Response, refreshToken: string): void => {
-    res
-      .cookie('refreshToken', refreshToken, { maxAge: +process.env.MAX_AGE_TOKEN, httpOnly: true, path: '/api/auth' })
-      .end()
+    res.cookie('refreshToken', refreshToken, { maxAge: +process.env.MAX_AGE_TOKEN, httpOnly: true, path: '/api/auth' })
   }
 }
 
