@@ -1,3 +1,7 @@
 import { cookie } from 'express-validator'
+import { NextFunction, Request, Response } from 'express'
 
-export const RefreshValidator = [cookie('refreshToken').exists().notEmpty().isJWT()]
+export const RefreshValidator = (req: Request, res: Response, next: NextFunction) => {
+  cookie('refreshToken').exists().notEmpty().isJWT()
+  next()
+}

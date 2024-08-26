@@ -14,7 +14,7 @@ router.post('/sign-up', SignUpValidator, authController.signUp)
 
 router.post('/refresh', RefreshValidator, authController.refresh)
 
-router.post('/logout', [AuthMiddleware, ...LogoutValidator], authController.logout)
+router.post('/logout', [AuthMiddleware, LogoutValidator], authController.logout)
 
 router.get('/activate/:link', authController.activate)
 
