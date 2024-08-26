@@ -41,6 +41,7 @@ class UserController {
     try {
       const { id } = req.params
       await this.userService.removeOne(id)
+      res.end()
     } catch (err) {
       next(err)
     }
