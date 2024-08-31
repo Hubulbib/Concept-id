@@ -6,8 +6,8 @@ export interface IAuthRequest extends Request, JwtPayload {
 }
 
 export interface IAuthUser {
-  userId: string
-  role?: string
+  uuid: string
+  role: string
   details: {
     ua: string
     ip: string

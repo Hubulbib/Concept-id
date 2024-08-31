@@ -57,7 +57,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     }
     const device = user.devices.find((e) => e.ua === detail.ua && e.ip === detail.ip)
 
-    console.log('device >', device)
+    //console.log('device >', device)
 
     if (!device) {
       // create device for user
@@ -79,11 +79,11 @@ export class AuthRepositoryImpl implements AuthRepository {
       return await this.responseData(user, uuidDevice)
     }
 
-    console.log('user.uuid >', user.uuid)
+    //console.log('user.uuid >', user.uuid)
 
     const session = await this.sessionRepository.findSessionByIds({ uuidDevice: device.uuid, uuidUser: user.uuid })
 
-    console.log('session >', session) // после /logout -> null
+    //console.log('session >', session) // после /logout -> null
 
     return {
       refreshToken: session.refreshToken.token,
@@ -143,7 +143,7 @@ export class AuthRepositoryImpl implements AuthRepository {
   }
 
   private readonly responseData = async (userData: User, uuidDevice: string): Promise<AuthBackDto> => {
-    const tokens = this.sessionRepository.generateTokens({ ...userData })
+    const tokens = this.sessionRepository.generateTokens({ uuid: userData.uuid, role: userData.role })
     await this.sessionRepository.saveToken({ uuidUser: userData.uuid, tokens, uuidDevice })
     return {
       ...tokens,

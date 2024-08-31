@@ -21,7 +21,7 @@ export const AuthMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     // TODO: fix it
     req['user'] = {
-      ...userData._doc,
+      ...userData,
       details: {
         ua: req.get('User-Agent'),
         ip: req.ip,

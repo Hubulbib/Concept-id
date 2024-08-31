@@ -4,7 +4,7 @@ import userController from '../../controllers/UserController/user.controller.js'
 
 const router = Router()
 
-router.get('/:id', [], userController.getOneById)
+router.get('/:id', [AuthMiddleware], userController.getOneById)
 
 router.put('/:id', [AuthMiddleware], userController.editOne)
 

@@ -1,5 +1,5 @@
 import { hash } from 'bcrypt'
-import { type User, userModel } from '../../entities/user.entity.js'
+import { userModel } from '../../entities/user.entity.js'
 import { UserMapper } from '../../mappers/user.mapper.js'
 import { type UserEntity } from '../../../../core/entites/user.entity.js'
 import { type UserRepository } from '../../../../core/repositories/UserRepository/user.repository.js'

@@ -1,4 +1,4 @@
-import { type NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Response } from 'express'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
 import { UserService } from '../../../core/services/UserService/user.service.js'
 import { type EditBodyDto } from '../../../core/repositories/UserRepository/dtos/edit-body.dto.js'
@@ -7,10 +7,11 @@ import { UserRepositoryImpl } from '../../db/repositories/UserRepository/user.re
 class UserController {
   constructor(readonly userService: UserService) {}
 
-  getOneById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  getOneById = async (req: IAuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params
-      const userData = await this.userService.getOneById(id)
+      const userId = req.user.uuid
+      const userData = await this.userService.getOneById(userId, id)
       res.json(userData)
     } catch (err) {
       next(err)
@@ -21,7 +22,8 @@ class UserController {
     try {
       const { id } = req.params
       const userBody: EditBodyDto = req.body
-      await this.userService.editOne(id, userBody)
+      const userId = req.user.uuid
+      await this.userService.editOne(userId, id, userBody)
       res.end()
     } catch (err) {
       next(err)
@@ -31,7 +33,8 @@ class UserController {
   removeOne = async (req: IAuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params
-      await this.userService.removeOne(id)
+      const userId = req.user.uuid
+      await this.userService.removeOne(userId, id)
       res.end()
     } catch (err) {
       next(err)

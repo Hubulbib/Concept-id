@@ -23,8 +23,6 @@ app.use(
   }),
 )
 
-// http://localhost:3000
-
 // API
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
