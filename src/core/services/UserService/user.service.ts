@@ -5,10 +5,6 @@ import { type UserEntity } from '../../entites/user.entity'
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  getAll = async (): Promise<UserEntity[]> => {
-    return await this.userRepository.getAll()
-  }
-
   getOneById = async (userId: string): Promise<UserEntity> => {
     return await this.userRepository.getOneById(userId)
   }

@@ -16,14 +16,6 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.toDomain(user)
   }
 
-  async getAll(): Promise<UserEntity[]> {
-    return (await this.userRepository.find({}, null)).map((el: User) =>
-      UserMapper.toDomain({
-        ...el['_doc'],
-      }),
-    )
-  }
-
   async editOne(userId: string, editBody: EditBodyDto): Promise<void> {
     const user = await this.userRepository.findOne({ uuid: userId })
     if (!user) {

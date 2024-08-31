@@ -7,15 +7,6 @@ import { UserRepositoryImpl } from '../../db/repositories/UserRepository/user.re
 class UserController {
   constructor(readonly userService: UserService) {}
 
-  getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userData = await this.userService.getAll()
-      res.json(userData)
-    } catch (err) {
-      next(err)
-    }
-  }
-
   getOneById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params

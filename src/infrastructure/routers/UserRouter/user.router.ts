@@ -6,8 +6,6 @@ const router = Router()
 
 router.get('/:id', [], userController.getOneById)
 
-router.get('', [], userController.getAll)
-
 router.put('/:id', [AuthMiddleware], userController.editOne)
 
 router.delete('/:id', [AuthMiddleware], userController.removeOne)
