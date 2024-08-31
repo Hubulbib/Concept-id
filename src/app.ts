@@ -1,5 +1,5 @@
 import express from 'express'
-import { dbConnect } from './infrastructure/db/index.js'
+import { dbConnect } from './infrastructure/db'
 import 'dotenv/config.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
