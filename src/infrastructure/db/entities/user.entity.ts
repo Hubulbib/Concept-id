@@ -48,7 +48,7 @@ export class User {
   @prop({ type: String, required: true })
   password: string
 
-  @prop({ type: String, required: false, unique: true })
+  @prop({ type: String, required: false })
   phone: string
 
   @prop({ type: String, required: true, unique: true })
