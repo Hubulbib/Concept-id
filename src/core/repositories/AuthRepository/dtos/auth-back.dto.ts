@@ -5,5 +5,6 @@ export class AuthBackDto {
     readonly user: UserEntity,
     readonly accessToken: string,
     readonly refreshToken: string,
+    readonly activationLink?: string,
   ) {}
 }

@@ -4,7 +4,6 @@ import { compare, hash } from 'bcrypt'
 import { genUuid } from '../../../utils/generate.js'
 import { UserMapper } from '../../mappers/user.mapper.js'
 import { ApiError } from '../../../exceptions/api.exception.js'
-import { MailRepository } from '../MailRepository/mail.repository'
 import { type User } from '../../entities/user.entity.js'
 import { type DetailDto } from '../../../../core/repositories/AuthRepository/dtos/detail.dto.js'
 import { type SignInDto } from '../../../../core/repositories/AuthRepository/dtos/sign-in.dto.js'
@@ -38,12 +37,7 @@ export class AuthRepositoryImpl implements AuthRepository {
       activationLink,
     })
 
-    await new MailRepository().sendActivationMail(
-      signUpDto.email,
-      `${process.env.API_URL}/api/auth/activate/${activationLink}`,
-    )
-
-    return await this.responseData(user, device.uuid)
+    return { ...(await this.responseData(user, device.uuid)), activationLink }
   }
 
   public signIn = async (signInDto: SignInDto, detail: DetailDto): Promise<AuthBackDto> => {

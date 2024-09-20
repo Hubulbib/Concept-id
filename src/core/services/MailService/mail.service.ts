@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer'
 import 'dotenv/config.js'
 
-export class MailRepository {
+export class MailService {
   constructor(
     private readonly transport = createTransport({
       host: process.env.SMTP_HOST,
@@ -18,7 +18,7 @@ export class MailRepository {
     await this.transport.sendMail({
       to,
       from: process.env.SMTP_USER,
-      subject: 'Активация аккаунта KARTATEKA',
+      subject: 'Активация аккаунта ConceptID',
       text: '',
       html: `
               <div>

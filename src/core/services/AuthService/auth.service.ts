@@ -4,6 +4,7 @@ import { type SignInDto } from '../../repositories/AuthRepository/dtos/sign-in.d
 import { type DetailDto } from '../../repositories/AuthRepository/dtos/detail.dto.js'
 import { type RefreshDto } from '../../repositories/AuthRepository/dtos/refresh.dto.js'
 import { type AuthBackDto } from '../../repositories/AuthRepository/dtos/auth-back.dto'
+import { MailService } from '../MailService/mail.service'
 
 export class AuthService {
   constructor(private readonly authRepository: AuthRepository) {}
@@ -13,7 +14,12 @@ export class AuthService {
   }
 
   public signUp = async (signUpDto: SignUpDto, detail: DetailDto): Promise<AuthBackDto> => {
-    return await this.authRepository.signUp(signUpDto, detail)
+    const authData = await this.authRepository.signUp(signUpDto, detail)
+    await new MailService().sendActivationMail(
+      authData.user.email,
+      `${process.env.API_URL}/api/auth/activate/${authData.activationLink}`,
+    )
+    return authData
   }
 
   public refresh = async (refreshDto: RefreshDto, detail: DetailDto): Promise<AuthBackDto> => {
