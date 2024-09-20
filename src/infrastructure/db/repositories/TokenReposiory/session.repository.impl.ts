@@ -1,20 +1,23 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { tsUnix } from '../../../utils/date.js'
 import { genUuid } from '../../../utils/generate.js'
-import { type Session, type SessionIds, sessionModel } from '../../entities/token.entity.js'
+import { type Session, type SessionIds } from '../../entities/token.entity.js'
 import { type SessionRepository } from './interfaces/session.interface.js'
 import { type SaveTokenDto } from './dtos/save-token.dto.js'
 import { GenerateTokensResult } from './dtos/generate-tokens-result.dto.js'
 import 'dotenv/config.js'
+import { BeAnObject } from '@typegoose/typegoose/lib/types'
+import { ReturnModelType } from '@typegoose/typegoose'
 
 export class SessionRepositoryImpl implements SessionRepository {
-  private readonly session = sessionModel
-
-  private readonly SECRET_ACCESS_JWT = process.env.SECRET_ACCESS_JWT
-  private readonly SECRET_REFRESH_JWT = process.env.SECRET_REFRESH_JWT
-  private readonly EXPIRES_IN_ACCESS = process.env.EXPIRES_IN_ACCESS
-  private readonly EXPIRES_IN_REFRESH = process.env.EXPIRES_IN_REFRESH
-  private readonly MAX_AGE_TOKEN = +process.env.MAX_AGE_TOKEN
+  constructor(
+    private readonly sessionRepository: ReturnModelType<typeof Session, BeAnObject>,
+    private readonly SECRET_ACCESS_JWT: string,
+    private readonly SECRET_REFRESH_JWT: string,
+    private readonly EXPIRES_IN_ACCESS: string,
+    private readonly EXPIRES_IN_REFRESH: string,
+    private readonly MAX_AGE_TOKEN: number,
+  ) {}
 
   public generateTokens = (payload: object): GenerateTokensResult => {
     const accessToken = jwt.sign(payload, this.SECRET_ACCESS_JWT, { expiresIn: this.EXPIRES_IN_ACCESS })
@@ -55,18 +58,18 @@ export class SessionRepositoryImpl implements SessionRepository {
       },
     }
 
-    await this.session.create(sessionData)
+    await this.sessionRepository.create(sessionData)
   }
 
   public removeSessionByRefresh = async (refreshToken: string): Promise<void> => {
-    await this.session.deleteOne({ 'refreshToken.token': refreshToken })
+    await this.sessionRepository.deleteOne({ 'refreshToken.token': refreshToken })
   }
 
   public findSessionByRefresh = async (refreshToken: string): Promise<Session> => {
-    return await this.session.findOne({ 'refreshToken.token': refreshToken })
+    return this.sessionRepository.findOne({ 'refreshToken.token': refreshToken })
   }
 
   public findSessionByIds = async (ids: SessionIds): Promise<Session> => {
-    return await this.session.findOne({ ids })
+    return this.sessionRepository.findOne({ ids })
   }
 }

@@ -1,10 +1,11 @@
+import { BeAnObject } from '@typegoose/typegoose/lib/types'
+import { ReturnModelType } from '@typegoose/typegoose'
 import { compare, hash } from 'bcrypt'
 import { genUuid } from '../../../utils/generate.js'
 import { UserMapper } from '../../mappers/user.mapper.js'
 import { ApiError } from '../../../exceptions/api.exception.js'
 import { MailRepository } from '../MailRepository/mail.repository'
-import { type User, userModel } from '../../entities/user.entity.js'
-import { SessionRepositoryImpl } from '../TokenReposiory/session.repository.impl.js'
+import { type User } from '../../entities/user.entity.js'
 import { type DetailDto } from '../../../../core/repositories/AuthRepository/dtos/detail.dto.js'
 import { type SignInDto } from '../../../../core/repositories/AuthRepository/dtos/sign-in.dto.js'
 import { type SignUpDto } from '../../../../core/repositories/AuthRepository/dtos/sign-up.dto.js'
@@ -12,12 +13,11 @@ import { type RefreshDto } from '../../../../core/repositories/AuthRepository/dt
 import { type AuthBackDto } from '../../../../core/repositories/AuthRepository/dtos/auth-back.dto.js'
 import { type AuthRepository } from '../../../../core/repositories/AuthRepository/auth.repository.js'
 import { EUserRole } from '../../entities/enums/user-role.enum'
+import { FactoryRepositories } from '../index'
 import 'dotenv/config.js'
 
 export class AuthRepositoryImpl implements AuthRepository {
-  // TODO: refactoring by constructor
-  private readonly userRepository = userModel
-  private readonly sessionRepository = new SessionRepositoryImpl()
+  constructor(private readonly userRepository: ReturnModelType<typeof User, BeAnObject>) {}
 
   public signUp = async (signUpDto: SignUpDto, detail: DetailDto): Promise<AuthBackDto> => {
     const candidate = await this.userRepository.findOne({ email: signUpDto.email })
@@ -81,7 +81,10 @@ export class AuthRepositoryImpl implements AuthRepository {
 
     //console.log('user.uuid >', user.uuid)
 
-    const session = await this.sessionRepository.findSessionByIds({ uuidDevice: device.uuid, uuidUser: user.uuid })
+    const session = await FactoryRepositories.createTokenRepository().findSessionByIds({
+      uuidDevice: device.uuid,
+      uuidUser: user.uuid,
+    })
 
     //console.log('session >', session) // после /logout -> null
 
@@ -93,7 +96,7 @@ export class AuthRepositoryImpl implements AuthRepository {
   }
 
   public logout = async (refreshToken: string): Promise<void> => {
-    const session = await this.sessionRepository.findSessionByRefresh(refreshToken)
+    const session = await FactoryRepositories.createTokenRepository().findSessionByRefresh(refreshToken)
     if (!session) {
       throw new Error('logout.session.notFound')
     }
@@ -109,15 +112,15 @@ export class AuthRepositoryImpl implements AuthRepository {
         $set: { devices: user.devices.filter((e) => e.uuid !== session.ids.uuidDevice) },
       },
     )
-    await this.sessionRepository.removeSessionByRefresh(refreshToken)
+    await FactoryRepositories.createTokenRepository().removeSessionByRefresh(refreshToken)
   }
 
   public refresh = async (refreshDto: RefreshDto, detail: DetailDto): Promise<AuthBackDto> => {
     if (!refreshDto.refreshToken) {
       throw ApiError.UnauthorizedError()
     }
-    const userData = this.sessionRepository.validateRefreshToken(refreshDto.refreshToken)
-    const session = await this.sessionRepository.findSessionByRefresh(refreshDto.refreshToken)
+    const userData = FactoryRepositories.createTokenRepository().validateRefreshToken(refreshDto.refreshToken)
+    const session = await FactoryRepositories.createTokenRepository().findSessionByRefresh(refreshDto.refreshToken)
     if (!userData || !session) {
       //throw Error('userdata || db Пользователь не авторизован')
       throw ApiError.UnauthorizedError()
@@ -125,7 +128,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     const user = await this.userRepository.findOne({ uuid: session.ids.uuidUser })
     const device = user.devices.find((e) => e.ua === detail.ua && e.ip === detail.ip)
     // remove session for creating new
-    await this.sessionRepository.removeSessionByRefresh(refreshDto.refreshToken)
+    await FactoryRepositories.createTokenRepository().removeSessionByRefresh(refreshDto.refreshToken)
 
     return await this.responseData(user, device.uuid)
   }
@@ -143,8 +146,11 @@ export class AuthRepositoryImpl implements AuthRepository {
   }
 
   private readonly responseData = async (userData: User, uuidDevice: string): Promise<AuthBackDto> => {
-    const tokens = this.sessionRepository.generateTokens({ uuid: userData.uuid, role: userData.role })
-    await this.sessionRepository.saveToken({ uuidUser: userData.uuid, tokens, uuidDevice })
+    const tokens = FactoryRepositories.createTokenRepository().generateTokens({
+      uuid: userData.uuid,
+      role: userData.role,
+    })
+    await FactoryRepositories.createTokenRepository().saveToken({ uuidUser: userData.uuid, tokens, uuidDevice })
     return {
       ...tokens,
       user: UserMapper.toDomain(userData),

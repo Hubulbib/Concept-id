@@ -4,10 +4,10 @@ import { ApiError } from '../../exceptions/api.exception.js'
 import { ResponseTokenDto } from './dtos/response-token.dto.js'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
 import { AuthService } from '../../../core/services/AuthService/auth.service.js'
-import { AuthRepositoryImpl } from '../../db/repositories/AuthRepository/auth.repository.impl.js'
 import { type SignInDto } from '../../../core/repositories/AuthRepository/dtos/sign-in.dto'
 import { type SignUpDto } from '../../../core/repositories/AuthRepository/dtos/sign-up.dto'
 import { type RefreshDto } from '../../../core/repositories/AuthRepository/dtos/refresh.dto'
+import { FactoryRepositories } from '../../db/repositories'
 import 'dotenv/config.js'
 
 class AuthController {
@@ -96,4 +96,4 @@ class AuthController {
   }
 }
 
-export default new AuthController(new AuthService(new AuthRepositoryImpl()))
+export default new AuthController(new AuthService(FactoryRepositories.createAuthRepositoryImpl()))

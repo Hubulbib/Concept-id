@@ -8,5 +8,6 @@ export class EditBodyDto {
     readonly surname?: string,
     readonly gender?: string,
     readonly dateBirthday?: Date,
+    readonly avatar?: string,
   ) {}
 }
