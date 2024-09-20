@@ -12,3 +12,4 @@ export const storage = new S3({
 })
 
 export const BUCKET_NAME = process.env.AWS_BUCKET_NAME
+export const STORAGE_BASE = process.env.AWS_CLIENT

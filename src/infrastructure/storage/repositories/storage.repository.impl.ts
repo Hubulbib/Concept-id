@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 import { UploadedFile } from 'express-fileupload'
 import { StorageRepository } from '../../../core/repositories/StorageRepository/storage.repository'
 import { genUuid } from '../../utils/generate'
-import { BUCKET_NAME, storage } from '../index'
+import { BUCKET_NAME, storage, STORAGE_BASE } from '../index'
 
 export class StorageRepositoryImpl implements StorageRepository {
   async getFile(fileId: string): Promise<string> {
@@ -43,6 +43,6 @@ export class StorageRepositoryImpl implements StorageRepository {
   }
 
   private getPathFileOnStorage(bucketName: string, fileId: string): string {
-    return `https://s3.storage.selcloud.ru/${bucketName}/${fileId}`
+    return `${STORAGE_BASE}/${bucketName}/${fileId}`
   }
 }
