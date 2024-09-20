@@ -5,7 +5,7 @@ export const storage = new S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY,
   },
-  endpoint: '',
+  endpoint: process.env.AWS_CLIENT,
   forcePathStyle: true,
   region: 'ru-1',
   apiVersion: 'latest',
