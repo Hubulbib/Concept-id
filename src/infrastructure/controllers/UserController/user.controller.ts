@@ -3,6 +3,7 @@ import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
 import { UserService } from '../../../core/services/UserService/user.service.js'
 import { type EditBodyDto } from '../../../core/repositories/UserRepository/dtos/edit-body.dto.js'
 import { UserRepositoryImpl } from '../../db/repositories/UserRepository/user.repository.impl.js'
+import { UploadedFile } from 'express-fileupload'
 
 class UserController {
   constructor(readonly userService: UserService) {}
@@ -25,6 +26,21 @@ class UserController {
       const userId = req.user.uuid
       await this.userService.editOne(userId, id, userBody)
       res.end()
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  editAvatar = async (
+    req: IAuthRequest & { files: { avatar: UploadedFile } },
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { avatar } = req.files
+      const userId = req.user.uuid
+      await this.userService.editAvatar(userId, avatar)
+      res.json(200).end()
     } catch (err) {
       next(err)
     }

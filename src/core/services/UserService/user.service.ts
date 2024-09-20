@@ -1,6 +1,7 @@
 import { type UserRepository } from '../../repositories/UserRepository/user.repository.js'
 import { type EditBodyDto } from '../../repositories/UserRepository/dtos/edit-body.dto.js'
 import { type UserEntity } from '../../entites/user.entity'
+import { type UploadedFile } from 'express-fileupload'
 import { ApiError } from '../../../infrastructure/exceptions/api.exception'
 
 export class UserService {
@@ -18,6 +19,10 @@ export class UserService {
       throw ApiError.NotAccess()
     }
     await this.userRepository.editOne(userId, editBody)
+  }
+
+  editAvatar = async (userId: string, avatar: UploadedFile): Promise<void> => {
+    await this.userRepository.editAvatar(userId, avatar)
   }
 
   removeOne = async (authId: string, userId: string): Promise<void> => {

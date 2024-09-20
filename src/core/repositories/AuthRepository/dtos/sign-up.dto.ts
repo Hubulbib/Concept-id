@@ -8,6 +8,5 @@ export class SignUpDto {
     readonly gender?: string,
     readonly phone?: string,
     readonly dateBirthday?: Date,
-    readonly avatar?: string,
   ) {}
 }

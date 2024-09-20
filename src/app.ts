@@ -1,9 +1,9 @@
 import express from 'express'
-import { dbConnect } from './infrastructure/db'
-import 'dotenv/config.js'
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import 'dotenv/config.js'
 
+import { dbConnect } from './infrastructure/db'
 import userRouter from './infrastructure/routers/UserRouter/user.router.js'
 import authRouter from './infrastructure/routers/AuthRouter/auth.router.js'
 import { ErrorMiddleware } from './infrastructure/middlewares/ErrorMiddleware/error.middleware.js'
@@ -14,6 +14,7 @@ const PORT = process.env.PORT
 // dbs
 await dbConnect()
 
+app.use
 app.use(express.json())
 app.use(cookieParser())
 app.use(

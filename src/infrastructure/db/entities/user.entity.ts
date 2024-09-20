@@ -33,7 +33,7 @@ export class User {
   @prop({ type: String, required: true, default: () => genUuid() })
   uuid: string
 
-  @prop({ type: String, required: true })
+  @prop({ type: String, required: true, default: () => '' })
   username: string
 
   @prop({ type: String, required: false })
