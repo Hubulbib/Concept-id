@@ -23,6 +23,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     if (candidate) {
       throw ApiError.BadRequest('Пользователь с таким email уже существует')
     }
+
     const device = {
       ...detail,
       uuid: genUuid(),
@@ -34,6 +35,7 @@ export class AuthRepositoryImpl implements AuthRepository {
       uuid: genUuid(),
       password: hashedPassword,
       devices: [device],
+      username: await this.generateUsername(signUpDto.email),
       activationLink,
     })
 
@@ -137,6 +139,16 @@ export class AuthRepositoryImpl implements AuthRepository {
     }
     user.role = EUserRole.user
     await user.save()
+  }
+
+  private generateUsername = async (email: string): Promise<string> => {
+    let username = email.split('@')[0]
+    let digit = Math.floor(1 + Math.random() * 10000)
+    while (await this.userRepository.findOne({ username })) {
+      digit *= 1.42
+      username += digit.toString()
+    }
+    return username
   }
 
   private readonly responseData = async (userData: User, uuidDevice: string): Promise<AuthBackDto> => {

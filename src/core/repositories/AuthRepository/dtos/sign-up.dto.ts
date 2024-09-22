@@ -1,6 +1,5 @@
 export class SignUpDto {
   constructor(
-    readonly username: string,
     readonly email: string,
     readonly password: string,
     readonly name?: string,
