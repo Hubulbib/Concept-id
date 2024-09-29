@@ -5,6 +5,7 @@ import { type UploadedFile } from 'express-fileupload'
 import { ApiError } from '../../../infrastructure/exceptions/api.exception'
 import { StorageService } from '../StorageService/storage.service'
 import { StorageRepositoryImpl } from '../../../infrastructure/storage/repositories/storage.repository.impl'
+import { BrokerRepositoryImpl } from '../../../infrastructure/broker'
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -24,7 +25,7 @@ export class UserService {
   }
 
   editAvatar = async (userId: string, avatar: UploadedFile): Promise<void> => {
-    const url = await new StorageService(new StorageRepositoryImpl()).uploadFile(avatar)
+    const url = await new StorageService(new StorageRepositoryImpl(), new BrokerRepositoryImpl()).uploadFile(avatar)
     await this.userRepository.editOne(userId, { avatar: url })
   }
 

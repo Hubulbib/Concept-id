@@ -8,11 +8,14 @@ import userRouter from './infrastructure/routers/UserRouter/user.router.js'
 import authRouter from './infrastructure/routers/AuthRouter/auth.router.js'
 import { ErrorMiddleware } from './infrastructure/middlewares/ErrorMiddleware/error.middleware.js'
 
+import { Broker } from './infrastructure/broker/consumer.broker'
+
 const app = express()
 const PORT = process.env.PORT
 
 // dbs
 await dbConnect()
+await Broker.connect()
 
 app.use
 app.use(express.json())

@@ -1,5 +1,6 @@
 import { UploadedFile } from 'express-fileupload'
 import { StorageRepository } from '../../repositories/StorageRepository/storage.repository'
+import { BrokerRepository } from '../../repositories/BrokerRepository/broker.repository'
 
 export class StorageService {
   constructor(private readonly storageRepository: StorageRepository) {}

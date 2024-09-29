@@ -9,6 +9,7 @@ import { type SignUpDto } from '../../../core/repositories/AuthRepository/dtos/s
 import { type RefreshDto } from '../../../core/repositories/AuthRepository/dtos/refresh.dto'
 import { FactoryRepositories } from '../../db/repositories'
 import 'dotenv/config.js'
+import { BrokerRepositoryImpl } from '../../broker'
 
 class AuthController {
   constructor(readonly authService: AuthService) {}
@@ -96,4 +97,6 @@ class AuthController {
   }
 }
 
-export default new AuthController(new AuthService(FactoryRepositories.createAuthRepositoryImpl()))
+export default new AuthController(
+  new AuthService(FactoryRepositories.createAuthRepositoryImpl(), new BrokerRepositoryImpl()),
+)

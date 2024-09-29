@@ -4,10 +4,13 @@ import { type SignInDto } from '../../repositories/AuthRepository/dtos/sign-in.d
 import { type DetailDto } from '../../repositories/AuthRepository/dtos/detail.dto.js'
 import { type RefreshDto } from '../../repositories/AuthRepository/dtos/refresh.dto.js'
 import { type AuthBackDto } from '../../repositories/AuthRepository/dtos/auth-back.dto'
-import { MailService } from '../MailService/mail.service'
+import { BrokerRepository } from '../../repositories/BrokerRepository/broker.repository'
 
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly brokerRepository: BrokerRepository,
+  ) {}
 
   public signIn = async (signInDto: SignInDto, detail: DetailDto): Promise<AuthBackDto> => {
     return await this.authRepository.signIn(signInDto, detail)
@@ -15,10 +18,11 @@ export class AuthService {
 
   public signUp = async (signUpDto: SignUpDto, detail: DetailDto): Promise<AuthBackDto> => {
     const authData = await this.authRepository.signUp(signUpDto, detail)
-    await new MailService().sendActivationMail(
-      authData.user.email,
-      `${process.env.API_URL}/api/auth/activate/${authData.activationLink}`,
-    )
+    const data = {
+      to: authData.user.email,
+      link: `${process.env.API_URL}/api/auth/activate/${authData.activationLink}`,
+    }
+    await this.brokerRepository.sendToQueue('mailQueue', data)
     return authData
   }
 
