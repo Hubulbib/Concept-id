@@ -1,9 +1,10 @@
-import { type NextFunction, type Response } from 'express'
 import { UploadedFile } from 'express-fileupload'
-import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
-import { UserService } from '../../../core/services/UserService/user.service.js'
-import { type EditBodyDto } from '../../../core/repositories/UserRepository/dtos/edit-body.dto.js'
+import { type NextFunction, type Response } from 'express'
 import { FactoryRepositories } from '../../db/repositories'
+import { UserService } from '../../../core/services/user/user.service.js'
+import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
+import { type EditBodyDto } from '../../../core/repositories/user/dtos/edit-body.dto.js'
+import { StorageRepositoryImpl } from '../../storage/repositories/storage.repository.impl.js'
 
 class UserController {
   constructor(readonly userService: UserService) {}
@@ -58,4 +59,6 @@ class UserController {
   }
 }
 
-export default new UserController(new UserService(FactoryRepositories.createUserRepositoryImpl()))
+export default new UserController(
+  new UserService(FactoryRepositories.createUserRepositoryImpl(), new StorageRepositoryImpl()),
+)

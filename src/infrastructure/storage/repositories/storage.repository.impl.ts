@@ -2,14 +2,14 @@ import { createReadStream, unlinkSync } from 'fs'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { UploadedFile } from 'express-fileupload'
-import { StorageRepository } from '../../../core/repositories/StorageRepository/storage.repository'
-import { genUuid } from '../../utils/generate'
-import { BUCKET_NAME, storage, STORAGE_BASE } from '../index'
+import { genUuid } from '../../utils/generate.js'
+import { StorageRepository } from '../../../core/repositories/storage/storage.repository.js'
+import { bucketName, storage, storageBase } from '../index'
 
 export class StorageRepositoryImpl implements StorageRepository {
   async getFile(fileId: string): Promise<string> {
     const params = {
-      Bucket: BUCKET_NAME,
+      Bucket: bucketName,
       Key: fileId,
     }
 
@@ -23,7 +23,7 @@ export class StorageRepositoryImpl implements StorageRepository {
 
     const fileStream = createReadStream(filePath)
     const params = {
-      Bucket: BUCKET_NAME,
+      Bucket: bucketName,
       Key: fileId,
       Body: fileStream,
       ContentType: file.mimetype,
@@ -43,6 +43,6 @@ export class StorageRepositoryImpl implements StorageRepository {
   }
 
   private getPathFileOnStorage(bucketName: string, fileId: string): string {
-    return `${STORAGE_BASE}/${bucketName}/${fileId}`
+    return `${storageBase}/${bucketName}/${fileId}`
   }
 }

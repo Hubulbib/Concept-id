@@ -1,15 +1,16 @@
 import * as amqp from 'amqplib'
-import { MailService } from '../../core/services/MailService/mail.service.js'
+import { MailService } from '../../core/services/mail/mail.service.js'
 import 'dotenv/config.js'
 
-class ConsumerBroker {
+export class ConsumerBroker {
   constructor(
+    private readonly brokerUri: string,
     private readonly mailService: MailService,
     private channel: amqp.Channel | null = null,
   ) {}
 
   async connect() {
-    const connection = await amqp.connect(process.env.BROKER_CLIENT)
+    const connection = await amqp.connect(this.brokerUri)
     this.channel = await connection.createChannel()
     await this.channel.assertQueue('mailQueue', { durable: true })
 
@@ -22,5 +23,3 @@ class ConsumerBroker {
     })
   }
 }
-
-export const Broker = new ConsumerBroker(new MailService())

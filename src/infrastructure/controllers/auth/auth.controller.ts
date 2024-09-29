@@ -1,15 +1,15 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
+import { FactoryRepositories } from '../../db/repositories'
 import { ApiError } from '../../exceptions/api.exception.js'
 import { ResponseTokenDto } from './dtos/response-token.dto.js'
+import { AuthService } from '../../../core/services/auth/auth.service.js'
+import { BrokerRepositoryImpl } from '../../broker/broker.repository.impl'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
-import { AuthService } from '../../../core/services/AuthService/auth.service.js'
-import { type SignInDto } from '../../../core/repositories/AuthRepository/dtos/sign-in.dto'
-import { type SignUpDto } from '../../../core/repositories/AuthRepository/dtos/sign-up.dto'
-import { type RefreshDto } from '../../../core/repositories/AuthRepository/dtos/refresh.dto'
-import { FactoryRepositories } from '../../db/repositories'
+import { type SignInDto } from '../../../core/repositories/auth/dtos/sign-in.dto.js'
+import { type SignUpDto } from '../../../core/repositories/auth/dtos/sign-up.dto.js'
+import { type RefreshDto } from '../../../core/repositories/auth/dtos/refresh.dto.js'
 import 'dotenv/config.js'
-import { BrokerRepositoryImpl } from '../../broker'
 
 class AuthController {
   constructor(readonly authService: AuthService) {}
@@ -98,5 +98,5 @@ class AuthController {
 }
 
 export default new AuthController(
-  new AuthService(FactoryRepositories.createAuthRepositoryImpl(), new BrokerRepositoryImpl()),
+  new AuthService(process.env.API_URL, FactoryRepositories.createAuthRepositoryImpl(), new BrokerRepositoryImpl()),
 )

@@ -1,8 +1,8 @@
-import { SessionRepositoryImpl } from './TokenReposiory/session.repository.impl'
-import { AuthRepositoryImpl } from './AuthRepository/auth.repository.impl'
-import { UserRepositoryImpl } from './UserRepository/user.repository.impl'
-import { sessionModel } from '../entities/token.entity'
-import { userModel } from '../entities/user.entity'
+import { SessionRepositoryImpl } from './token/session.repository.impl.js'
+import { AuthRepositoryImpl } from './auth/auth.repository.impl.js'
+import { UserRepositoryImpl } from './user/user.repository.impl.js'
+import { sessionModel } from '../entities/token.entity.js'
+import { userModel } from '../entities/user.entity.js'
 
 export class FactoryRepositories {
   static createAuthRepositoryImpl = () => {

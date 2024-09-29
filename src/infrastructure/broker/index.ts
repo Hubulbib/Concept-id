@@ -1,20 +1,13 @@
-import * as amqp from 'amqplib'
-import { BrokerRepository } from '../../core/repositories/BrokerRepository/broker.repository.js'
-import 'dotenv/config.js'
+import { ConsumerBroker } from './consumer.broker'
+import { MailRepositoryImpl } from '../mail/mail.repository.impl'
+import { MailService } from '../../core/services/mail/mail.service.js'
 
-export class BrokerRepositoryImpl implements BrokerRepository {
-  constructor(private channel: amqp.Channel | null = null) {}
-
-  async connect() {
-    if (!this.channel) {
-      const connection = await amqp.connect(process.env.BROKER_CLIENT)
-      this.channel = await connection.createChannel()
-    }
-  }
-
-  async sendToQueue(queueName: string, data: any): Promise<void> {
-    await this.connect()
-    await this.channel?.assertQueue(queueName, { durable: true })
-    this.channel?.sendToQueue(queueName, Buffer.from(JSON.stringify(data)), { persistent: true })
+export const brokerConnect = async () => {
+  const brokerUri = process.env.BROKER_CLIENT
+  try {
+    await new ConsumerBroker(brokerUri, new MailService(new MailRepositoryImpl())).connect()
+    console.log({ msg: 'broker.connected', data: { uri: brokerUri } })
+  } catch (err) {
+    console.log({ msg: 'broker.failed', err })
   }
 }

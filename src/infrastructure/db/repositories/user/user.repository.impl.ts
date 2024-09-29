@@ -1,11 +1,11 @@
+import { BeAnObject } from '@typegoose/typegoose/lib/types'
+import { ReturnModelType } from '@typegoose/typegoose'
 import { hash } from 'bcrypt'
 import { User } from '../../entities/user.entity.js'
 import { UserMapper } from '../../mappers/user.mapper.js'
 import { type UserEntity } from '../../../../core/entites/user.entity.js'
-import { type UserRepository } from '../../../../core/repositories/UserRepository/user.repository.js'
-import { type EditBodyDto } from '../../../../core/repositories/UserRepository/dtos/edit-body.dto.js'
-import { BeAnObject } from '@typegoose/typegoose/lib/types'
-import { ReturnModelType } from '@typegoose/typegoose'
+import { type UserRepository } from '../../../../core/repositories/user/user.repository.js'
+import { type EditBodyDto } from '../../../../core/repositories/user/dtos/edit-body.dto.js'
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly userRepository: ReturnModelType<typeof User, BeAnObject>) {}

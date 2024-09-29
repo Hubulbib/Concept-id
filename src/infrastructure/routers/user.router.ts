@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { AuthMiddleware } from '../../middlewares/AuthMiddleware/auth.middleware.js'
-import userController from '../../controllers/UserController/user.controller.js'
 import fileUpload from 'express-fileupload'
-import { UserValidator } from '../../validators/user.validator'
+import { AuthMiddleware } from '../middlewares/auth.middleware.js'
+import userController from '../controllers/user/user.controller.js'
+import { UserValidator } from '../validators/user.validator.js'
 
 const router = Router()
 

@@ -4,18 +4,18 @@ import cors from 'cors'
 import 'dotenv/config.js'
 
 import { dbConnect } from './infrastructure/db'
-import userRouter from './infrastructure/routers/UserRouter/user.router.js'
-import authRouter from './infrastructure/routers/AuthRouter/auth.router.js'
-import { ErrorMiddleware } from './infrastructure/middlewares/ErrorMiddleware/error.middleware.js'
+import { brokerConnect } from './infrastructure/broker/'
+import userRouter from './infrastructure/routers/user.router.js'
+import authRouter from './infrastructure/routers/auth.router.js'
 
-import { Broker } from './infrastructure/broker/consumer.broker'
+import { ErrorMiddleware } from './infrastructure/middlewares/error.middleware.js'
 
 const app = express()
 const PORT = process.env.PORT
 
 // dbs
 await dbConnect()
-await Broker.connect()
+await brokerConnect()
 
 app.use
 app.use(express.json())

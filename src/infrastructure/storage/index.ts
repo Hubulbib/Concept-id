@@ -11,5 +11,5 @@ export const storage = new S3({
   apiVersion: 'latest',
 })
 
-export const BUCKET_NAME = process.env.AWS_BUCKET_NAME
-export const STORAGE_BASE = process.env.AWS_CLIENT
+export const bucketName = process.env.AWS_BUCKET_NAME
+export const storageBase = process.env.AWS_CLIENT

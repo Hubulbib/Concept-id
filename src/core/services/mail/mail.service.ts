@@ -1,23 +1,13 @@
-import { createTransport } from 'nodemailer'
+import { MailRepository } from '../../repositories/mail/mail.repository.js'
 import 'dotenv/config.js'
 
 export class MailService {
-  constructor(
-    private readonly transport = createTransport({
-      host: process.env.SMTP_HOST,
-      port: +process.env.SMTP_PORT,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    }),
-  ) {}
+  constructor(private readonly mailRepository: MailRepository) {}
 
   async sendActivationMail(to: string, link: string): Promise<void> {
-    await this.transport.sendMail({
+    await this.mailRepository.sendActivationMail({
       to,
-      from: process.env.SMTP_USER,
+      link,
       subject: 'Активация аккаунта ConceptID',
       text: '',
       html: `

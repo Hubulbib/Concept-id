@@ -1,5 +1,5 @@
-import { type AuthBackDto } from '../../../../core/repositories/AuthRepository/dtos/auth-back.dto'
-import { type UserEntity } from '../../../../core/entites/user.entity'
+import { type AuthBackDto } from '../../../../core/repositories/auth/dtos/auth-back.dto.js'
+import { type UserEntity } from '../../../../core/entites/user.entity.js'
 
 export class ResponseTokenDto {
   public user: UserEntity
