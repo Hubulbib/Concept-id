@@ -1,16 +1,16 @@
-import { type AuthRepository } from '../../repositories/auth/auth.repository.js'
-import { type SignUpDto } from '../../repositories/auth/dtos/sign-up.dto.js'
-import { type SignInDto } from '../../repositories/auth/dtos/sign-in.dto.js'
-import { type DetailDto } from '../../repositories/auth/dtos/detail.dto.js'
-import { type RefreshDto } from '../../repositories/auth/dtos/refresh.dto.js'
-import { type AuthBackDto } from '../../repositories/auth/dtos/auth-back.dto.js'
-import { BrokerRepository } from '../../repositories/broker/broker.repository.js'
+import { type AuthRepository } from '../repositories/auth/auth.repository.js'
+import { type SignUpDto } from '../repositories/auth/dtos/sign-up.dto.js'
+import { type SignInDto } from '../repositories/auth/dtos/sign-in.dto.js'
+import { type DetailDto } from '../repositories/auth/dtos/detail.dto.js'
+import { type RefreshDto } from '../repositories/auth/dtos/refresh.dto.js'
+import { type AuthBackDto } from '../repositories/auth/dtos/auth-back.dto.js'
+import { BrokerService } from './broker.service.js'
 
 export class AuthService {
   constructor(
     private readonly apiURL: string,
     private readonly authRepository: AuthRepository,
-    private readonly brokerRepository: BrokerRepository,
+    private readonly brokerService: BrokerService,
   ) {}
 
   public signIn = async (signInDto: SignInDto, detail: DetailDto): Promise<AuthBackDto> => {
@@ -23,7 +23,7 @@ export class AuthService {
       to: authData.user.email,
       link: `${this.apiURL}/api/auth/activate/${authData.activationLink}`,
     }
-    await this.brokerRepository.sendToQueue('mailQueue', data)
+    await this.brokerService.sendToQueue('mailQueue', data)
     return authData
   }
 

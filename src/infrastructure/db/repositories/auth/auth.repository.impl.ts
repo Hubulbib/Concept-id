@@ -11,7 +11,7 @@ import { type SignUpDto } from '../../../../core/repositories/auth/dtos/sign-up.
 import { type RefreshDto } from '../../../../core/repositories/auth/dtos/refresh.dto.js'
 import { type AuthBackDto } from '../../../../core/repositories/auth/dtos/auth-back.dto.js'
 import { type AuthRepository } from '../../../../core/repositories/auth/auth.repository.js'
-import { EUserRole } from '../../entities/enums/user-role.enum'
+import { EUserRole } from '../../entities/enums/user-role.enum.js'
 import { FactoryRepositories } from '../index'
 import 'dotenv/config.js'
 

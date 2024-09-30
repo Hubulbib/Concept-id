@@ -1,4 +1,4 @@
-import { MailRepository } from '../../repositories/mail/mail.repository.js'
+import { MailRepository } from '../repositories/mail/mail.repository.js'
 import 'dotenv/config.js'
 
 export class MailService {

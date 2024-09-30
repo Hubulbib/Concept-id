@@ -1,15 +1,14 @@
 import { type UploadedFile } from 'express-fileupload'
-import { type UserEntity } from '../../entites/user.entity.js'
-import { StorageService } from '../storage/storage.service.js'
-import { ApiError } from '../../../infrastructure/exceptions/api.exception.js'
-import { type UserRepository } from '../../repositories/user/user.repository.js'
-import { type EditBodyDto } from '../../repositories/user/dtos/edit-body.dto.js'
-import { StorageRepository } from '../../repositories/storage/storage.repository.js'
+import { type UserEntity } from '../entites/user.entity.js'
+import { StorageService } from './storage.service.js'
+import { ApiError } from '../../infrastructure/exceptions/api.exception.js'
+import { type UserRepository } from '../repositories/user/user.repository.js'
+import { type EditBodyDto } from '../repositories/user/dtos/edit-body.dto.js'
 
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly storageRepository: StorageRepository,
+    private readonly storageService: StorageService,
   ) {}
 
   getOneById = async (authId: string, userId: string): Promise<UserEntity> => {
@@ -27,7 +26,7 @@ export class UserService {
   }
 
   editAvatar = async (userId: string, avatar: UploadedFile): Promise<void> => {
-    const url = await new StorageService(this.storageRepository).uploadFile(avatar)
+    const url = await this.storageService.uploadFile(avatar)
     await this.userRepository.editOne(userId, { avatar: url })
   }
 

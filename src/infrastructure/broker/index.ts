@@ -1,6 +1,6 @@
 import { ConsumerBroker } from './consumer.broker'
 import { MailRepositoryImpl } from '../mail/mail.repository.impl'
-import { MailService } from '../../core/services/mail/mail.service.js'
+import { MailService } from '../../core/services/mail.service.js'
 
 export const brokerConnect = async () => {
   const brokerUri = process.env.BROKER_CLIENT

@@ -1,5 +1,5 @@
 import * as amqp from 'amqplib'
-import { MailService } from '../../core/services/mail/mail.service.js'
+import { MailService } from '../../core/services/mail.service.js'
 import 'dotenv/config.js'
 
 export class ConsumerBroker {
