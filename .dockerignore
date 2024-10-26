@@ -1,8 +1,25 @@
-node_modules
+# Versioning and metadata
 .git
-Dockerfile
-.env
 .gitignore
+.dockerignore
+
+# Build dependencies
+dist
+__tests__
+redisdata
+node_modules
+coverage
 build
+
+# Environment (contains sensitive data)
+.env
+
+# Files not required for production
+.editorconfig
+Dockerfile
+compose.yaml
 README.md
-src/infrastructure/storage/static
+.eslintrc
+nodemon.json
+nginx.conf
+jest.config.ts

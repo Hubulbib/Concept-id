@@ -7,8 +7,22 @@ export class BrokerRepositoryImpl implements BrokerRepository {
 
   async connect() {
     if (!this.channel) {
-      const connection = await amqp.connect(process.env.BROKER_CLIENT)
-      this.channel = await connection.createChannel()
+      const maxAttempts = 5
+      const delay = 2500
+
+      for (let attempts = 1; attempts <= maxAttempts; attempts++) {
+        try {
+          const connection = await amqp.connect(process.env.BROKER_CLIENT)
+          this.channel = await connection.createChannel()
+          return
+        } catch (error) {
+          if (attempts < maxAttempts) {
+            await new Promise((resolve) => setTimeout(resolve, delay))
+          } else {
+            throw Error('Broker failed to start')
+          }
+        }
+      }
     }
   }
 

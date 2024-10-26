@@ -12,7 +12,7 @@ import { type RefreshDto } from '../../../../core/repositories/auth/dtos/refresh
 import { type AuthBackDto } from '../../../../core/repositories/auth/dtos/auth-back.dto.js'
 import { type AuthRepository } from '../../../../core/repositories/auth/auth.repository.js'
 import { EUserRole } from '../../entities/enums/user-role.enum.js'
-import { FactoryRepositories } from '../index'
+import { FactoryRepositories } from '../index.js'
 import 'dotenv/config.js'
 
 export class AuthRepositoryImpl implements AuthRepository {

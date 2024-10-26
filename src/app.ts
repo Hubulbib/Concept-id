@@ -3,8 +3,8 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import 'dotenv/config.js'
 
-import { dbConnect } from './infrastructure/db'
-import { brokerConnect } from './infrastructure/broker/'
+import { dbConnect } from './infrastructure/db/index.js'
+import { brokerConnect } from './infrastructure/broker/index.js'
 import userRouter from './infrastructure/routers/user.router.js'
 import authRouter from './infrastructure/routers/auth.router.js'
 

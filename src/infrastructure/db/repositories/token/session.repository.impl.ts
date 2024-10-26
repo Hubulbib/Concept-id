@@ -1,4 +1,6 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken'
+import { ReturnModelType } from '@typegoose/typegoose'
+import { BeAnObject } from '@typegoose/typegoose/lib/types'
 import { tsUnix } from '../../../utils/date.js'
 import { genUuid } from '../../../utils/generate.js'
 import { type Session, type SessionIds } from '../../entities/token.entity.js'
@@ -6,8 +8,6 @@ import { type SessionRepository } from './interfaces/session.interface.js'
 import { type SaveTokenDto } from './dtos/save-token.dto.js'
 import { GenerateTokensResult } from './dtos/generate-tokens-result.dto.js'
 import 'dotenv/config.js'
-import { BeAnObject } from '@typegoose/typegoose/lib/types'
-import { ReturnModelType } from '@typegoose/typegoose'
 
 export class SessionRepositoryImpl implements SessionRepository {
   constructor(

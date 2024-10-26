@@ -1,7 +1,7 @@
 import { type JwtPayload } from 'jsonwebtoken'
-import { type SaveTokenDto } from '../dtos/save-token.dto'
-import { type Session, type SessionIds } from '../../../entities/token.entity'
-import { type GenerateTokensResult } from '../dtos/generate-tokens-result.dto'
+import { type SaveTokenDto } from '../dtos/save-token.dto.js'
+import { type Session, type SessionIds } from '../../../entities/token.entity.js'
+import { type GenerateTokensResult } from '../dtos/generate-tokens-result.dto.js'
 
 export interface SessionRepository {
   generateTokens: (payload: object) => GenerateTokensResult

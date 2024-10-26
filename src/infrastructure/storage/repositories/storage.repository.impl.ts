@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 import { UploadedFile } from 'express-fileupload'
 import { genUuid } from '../../utils/generate.js'
 import { StorageRepository } from '../../../core/repositories/storage/storage.repository.js'
-import { bucketName, storage, storageBase } from '../index'
+import { bucketName, storage, storageBase } from '../index.js'
 
 export class StorageRepositoryImpl implements StorageRepository {
   async getFile(fileId: string): Promise<string> {

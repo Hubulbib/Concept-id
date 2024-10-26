@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express'
-import { ApiError } from '../exceptions/api.exception'
-import { IAuthRequest } from '../interfaces/auth.request.interface'
+import { ApiError } from '../exceptions/api.exception.js'
+import { IAuthRequest } from '../interfaces/auth.request.interface.js'
 
 export class UserValidator {
   static editAvatar = (req: IAuthRequest, res: Response, next: NextFunction) => {

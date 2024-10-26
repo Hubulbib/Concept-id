@@ -1,6 +1,6 @@
 import { UploadedFile } from 'express-fileupload'
 import { type NextFunction, type Response } from 'express'
-import { FactoryRepositories } from '../../db/repositories'
+import { FactoryRepositories } from '../../db/repositories/index.js'
 import { UserService } from '../../../core/services/user.service.js'
 import { StorageService } from '../../../core/services/storage.service.js'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'

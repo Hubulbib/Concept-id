@@ -13,7 +13,7 @@ export async function dbConnect(): Promise<void> {
   })
 
   mongoose.connection.on('open', () => {
-    console.log({ msg: 'mongoDb.connected', data: { uri: dbUri } })
+    console.log({ msg: 'mongoDb.connected' })
   })
 
   try {

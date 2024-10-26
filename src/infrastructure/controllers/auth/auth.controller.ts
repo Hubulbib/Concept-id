@@ -1,15 +1,15 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
-import { FactoryRepositories } from '../../db/repositories'
+import { FactoryRepositories } from '../../db/repositories/index.js'
 import { ApiError } from '../../exceptions/api.exception.js'
 import { ResponseTokenDto } from './dtos/response-token.dto.js'
 import { AuthService } from '../../../core/services/auth.service.js'
-import { BrokerRepositoryImpl } from '../../broker/broker.repository.impl'
+import { BrokerRepositoryImpl } from '../../broker/broker.repository.impl.js'
 import { type IAuthRequest } from '../../interfaces/auth.request.interface.js'
 import { type SignInDto } from '../../../core/repositories/auth/dtos/sign-in.dto.js'
 import { type SignUpDto } from '../../../core/repositories/auth/dtos/sign-up.dto.js'
 import { type RefreshDto } from '../../../core/repositories/auth/dtos/refresh.dto.js'
-import { BrokerService } from '../../../core/services/broker.service'
+import { BrokerService } from '../../../core/services/broker.service.js'
 import 'dotenv/config.js'
 
 class AuthController {
